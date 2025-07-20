@@ -1,1 +1,0 @@
-Section pour gerer les appels dans au serveur page de POST
