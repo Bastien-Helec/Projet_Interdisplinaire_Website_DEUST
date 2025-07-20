@@ -5,9 +5,7 @@ services:
     ports:
       - "80:80"
     volumes:
-    - ./../Website/:/var/www/html/site
-    - ./../Ressources/lib/Model:/var/www/html/site/lib/Model
-    - ./../Ressources/lib/View:/var/www/html/site/lib/View
+    - ./../Website:/var/www/html/site
     - "./../.htaccess:/var/www/html/.htaccess"
 
   mysql:
