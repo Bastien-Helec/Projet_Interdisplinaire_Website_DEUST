@@ -1,0 +1,33 @@
+---
+title: Libs Docs
+author:
+  - Bastien Helec
+date: 09/07/2025
+
+urlcolor: NavyBlue
+toccolor: Red
+
+geometry:
+  - top=2cm
+  - bottom=1.5cm
+  - left=2cm
+  - right=2cm
+
+header-includes:
+  - \usepackage{enumitem}
+  - \setlistdepth{10}
+  - \renewlist{itemize}{itemize}{10}
+  - \setlist[itemize,1]{label=\textbullet}
+  - \setlist[itemize,2]{label=–}
+  - \setlist[itemize,3]{label=*}
+  - \setlist[itemize,4]{label=→}
+  - \setlist[itemize,5]{label=»}
+  - \setlist[itemize,6]{label=\tiny\textbullet}
+  - \setlist[itemize,7]{label=\tiny–}
+  - \setlist[itemize,8]{label=\tiny*}
+  - \setlist[itemize,9]{label=\tiny→}
+  - \setlist[itemize,10]{label=\tiny»}
+  - \definecolor{bgcolor}{HTML}{F0F0F0}
+  - \let\oldtexttt\texttt
+  - \renewcommand{\texttt}[1]{\colorbox{bgcolor}{\oldtexttt{#1}}}
+---
