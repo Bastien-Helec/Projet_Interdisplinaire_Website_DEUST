@@ -13,6 +13,7 @@ $li_conf = new Glob_Fields('li_conf', 'li', 'li', '<a href="#"> Conférences </a
 
 $li_hist = new Glob_Fields('li_hist', 'li', 'li', '<a href="#"> Histoire </a>');
 
+
 $navbar = new Glob_Fields('navbar_ID', 'navbar_CLS', 'nav', [
     $li_home,
     $li_activities,

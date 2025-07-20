@@ -21,7 +21,7 @@ $div_article_2 = new Div('infoFoot_ID', 'infoFoot_CLS', [
 $div_article_3 = new Div('legal_ID', 'legal_CLS', [
     new Glob_Fields('mlegal',  'legal_CLS' , 'p', '<a href="#"> Mentions légales </a>'),
     new Glob_Fields('polconf',  'legal_CLS' , 'p', '<a href="#"> Politiques de confidentialités </a>'),
-    new Glob_Fields('Copyright',  'legal_CLS' , 'p', '<a href="#"> ©Copyright 2025 </a>'),    
+    new Glob_Fields('Copyright',  'legal_CLS' , 'p',  '©Copyright 2025'),    
 ]);
 
 $div_foot = new Div('foot_ID', 'foot_CLS', [
