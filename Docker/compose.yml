@@ -1,0 +1,31 @@
+services:
+  php-8.3-apache:
+    build: .
+    container_name: php_Congres
+    ports:
+      - "80:80"
+    volumes:
+    - ./../Website:/var/www/html/site
+    - "./../.htaccess:/var/www/html/.htaccess"
+
+  mysql:
+    image: mariadb:latest
+    container_name: DB_Congres
+    environment:
+      MYSQL_ROOT_PASSWORD: Congres_DEUST_34
+      MYSQL_USER: mysql
+      MYSQL_PASSWORD: mysql
+      MYSQL_DATABASE : Congres
+    volumes:
+      - ./rsc/mysql/:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: DBManager_Congres
+    environment:
+      PMA_HOST: DB_Congres
+      MYSQL_ROOT_PASSWORD: Congres_DEUST_34
+    ports:
+      - "8080:80"
