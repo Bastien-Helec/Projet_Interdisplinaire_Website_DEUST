@@ -54,13 +54,23 @@ if (isset($_GET['page'])){
 
             break;
             
-        case 'planning':
-            echo "<h1> Planning </h1>";
-            break;
+            
+            case 'conferences':
+                echo "<h1> Conférences </h1>";
+                echo'            
+                <link rel="stylesheet" href="./Controller/Body/Conferences/planning_conferences/planning_Conferences_CSS_Controller.php">
+                <link rel="stylesheet" href="./Controller/Body/Conferences/li_conferences/li_Conferences_CSS_Controller.php">';
+                
+                require_once "./Controller/Body/Conferences/Conferences_Controller.php";                
+                break;
 
-        case 'conferences':
-            echo "<h1> Conférences </h1>";
-            break;
+            case 'planning':
+                echo "<h1> Planning </h1>";
+                echo'            
+                <link rel="stylesheet" href="./Controller/Body/Planning/planning_CSS_Controller.php">';
+
+                require_once "./Controller/Body/Planning/planning_Controller.php";
+                break;
         }
 }
 

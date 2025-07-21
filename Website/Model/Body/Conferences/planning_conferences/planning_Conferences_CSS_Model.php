@@ -2,7 +2,7 @@
 
 require_once "./../../../../lib/Model/CSS/PAGES/Args_CSS.php";
 
-$div = (new Args_CSS('#div_planning_activities_ID'))
+$div = (new Args_CSS('#div_planning_conferences_ID'))
 ->set('background-color', '#FAFAFA')
 ->set('display', 'flex')
 ->set('padding','5px')
@@ -10,7 +10,7 @@ $div = (new Args_CSS('#div_planning_activities_ID'))
 ->set('font-size','1.5em')
 ;
 
-$planning_activities_CLS = (new Args_CSS('.div_planning_activitie_CLS'))
+$actus_CLS = (new Args_CSS('.div_planning_conference_CLS'))
 ->set('width', '100%')
 ->set('height', '100%')
 ->set('text-align', 'center')
@@ -18,12 +18,12 @@ $planning_activities_CLS = (new Args_CSS('.div_planning_activitie_CLS'))
 ;
 
 
-$planning_activites_CSS = [
+$planning_conferences_CSS = [
     $div,
-    $planning_activities_CLS,
+    $actus_CLS,
 ];
 
-foreach($planning_activites_CSS as $css){
+foreach($planning_conferences_CSS as $css){
     echo $css->gen_css();
 }
 
