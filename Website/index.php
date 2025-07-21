@@ -17,7 +17,6 @@ echo '
 ';
 
 // Global / Base 
-
 echo '<link rel="stylesheet" href="./Controller/Base_CSS_Controller.php">';
 
 // Partie Header
@@ -26,10 +25,6 @@ echo'
 <link rel="stylesheet" href="./Controller/Head/Navbar/Navbar_CSS_Controller.php">
 ';
 
-// Partie body accueil
-echo'
-<link rel="stylesheet" href="./Controller/Body/Home/Actus/Actus_CSS_Controller.php">
-<link rel="stylesheet" href="./Controller/Body/Home/Section_1/Section_1_CSS_Controller.php">';
 
 //Partie Footer
 echo'
@@ -40,7 +35,34 @@ echo'
 require_once "./Controller/Head/Head_Controller.php";
 
 // Le corps du site
-require_once "./Controller/Body/Home/Home_Controller.php";
+if (empty($_GET)){
+    require_once "./Controller/Body/Home/Home_Controller.php";
+        echo'
+        <link rel="stylesheet" href="./Controller/Body/Home/Actus/Actus_CSS_Controller.php">
+        <link rel="stylesheet" href="./Controller/Body/Home/Section_1/Section_1_CSS_Controller.php">';
+}
+if (isset($_GET['page'])){
+    switch ($_GET['page']){
+        
+        case 'activities':
+            echo "<h1> Activités </h1>";
+            echo'
+            <link rel="stylesheet" href="./Controller/Body/Activities/planning_activities/planning_Activities_CSS_Controller.php">
+            <link rel="stylesheet" href="./Controller/Body/Activities/li_activities/li_Activities_CSS_Controller.php">';
+            
+            require_once "./Controller/Body/Activities/Activities_Controller.php";
+
+            break;
+            
+        case 'planning':
+            echo "<h1> Planning </h1>";
+            break;
+
+        case 'conferences':
+            echo "<h1> Conférences </h1>";
+            break;
+        }
+}
 
 // Le pied du site
 require_once "./Controller/Foot/Foot_Controller.php";
