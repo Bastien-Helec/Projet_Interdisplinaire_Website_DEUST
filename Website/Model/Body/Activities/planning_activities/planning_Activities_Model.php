@@ -2,28 +2,39 @@
 
 require_once "./lib/Model/PHP/PAGES/Div.php";
 require_once "./lib/Model/PHP/PAGES/Fields.php";
+require_once "./lib/Model/PHP/BDD/SQL/FONCTIONS METIERS/Select.php";
 
-function create_planning_conferences($number,string $contenu){
-    $planning_activities = new Glob_Fields("activitie_{$number}_title", "div_planning_activitie_CLS", 'h4', "planning activité {$number}");
-    $planning_activities_body = new Glob_Fields("activitie_{$number}_body", "div_planning_activitie_CLS", 'p',  "{$contenu}");
+function create_li_activities_planning($number, $contenu) {
+    $li_activities = new Glob_Fields("li_activite_planning_{$number}_title", "div_li_activite_CLS", 'h4', "Activité {$number}");
+    $li_activities_body = new Glob_Fields("li_activite_planning_{$number}_body", "div_li_activite_CLS", 'p', "{$contenu}");
 
-    $div_planning_activities_number = new Div("activitie_{$number}_ID", "div_planning_activitie_CLS",[
-        $planning_activities,
-        $planning_activities_body,
+    $div_li_activities_number = new Div("li_activite_planning_{$number}_ID", "div_li_activite_CLS", [
+        $li_activities,
+        $li_activities_body,
     ]);
 
-    return $div_planning_activities_number; 
+    return $div_li_activities_number;
 }
 
+// Liste les activites + leur planning
+$activites = Select_SQL::activitesAvecPlanning();
 
-$div_planning_activities = new Div('div_planning_activities_ID', 'div_planning_activities_CLS',[
-    create_planning_conferences(1,"Lundi"),
-    create_planning_conferences(2,"Mardi"),
-    create_planning_conferences(3,"Mercredi"),
-    create_planning_conferences(4,"Jeudi"),
-    create_planning_conferences(4,"Vendredi"),
-]);
+$liste_divs = [];
 
-$div_planning_activities= $div_planning_activities->gen_div();
+foreach ($activites as $index => $activite) {
+    $contenu = "{$activite["libelle"]} | Tarif : {$activite["tarif"]} € | Places : {$activite["nbPlace"]} | Date : {$activite["date"]} | " .
+               ($activite["estMatin"] ? "Matin" : "Après-midi");
 
-?>  
+    $liste_divs[] = create_li_activities_planning($index + 1, $contenu);
+}
+
+$div_li_activities_planning = new Div(
+    'div_li_activities_planning_ID',
+    'div_li_activities_planning_CLS',
+    array_merge([
+        new Glob_Fields("li_activities_planning_title_ID", "li_activities_planning_title_CLS", "h1", "Planning des Activités")
+    ], $liste_divs)
+);
+
+$div_li_activities_planning = $div_li_activities_planning->gen_div();
+?>
