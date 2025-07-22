@@ -104,10 +104,8 @@ if (isset($_GET['page'])){
         
         case 'admin' : 
             if(isset($_SESSION['isadmin']) && $_SESSION['isadmin'] === true ){
-                require_once "./Controller/Body/Admin/Admin_Controller.php";
-                require "./Controller/Body/Admin/usrs/li_Admin_usr_Controller.php";
-                require "./Controller/Body/Admin/act/li_Admin_act_Controller.php";
-                require "./Controller/Body/Admin/ses/li_Admin_ses_Controller.php";
+                require "./Controller/Body/Admin/Admin_Controller.php";
+                echo '<link rel="stylesheet" href="./Controller/Body/Admin/Admin_CSS_Controller.php">';
             }else {
                 require_once "./Controller/Body/Erreur/403_Controller.php";
                 echo '<link rel="stylesheet" href="./Controller/Body/Erreur/403_CSS_Controller.php">';

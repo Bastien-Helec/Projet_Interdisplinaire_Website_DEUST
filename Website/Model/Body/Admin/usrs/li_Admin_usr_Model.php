@@ -34,5 +34,5 @@ $div_users = new Div('users_admin_ID', 'users_CLS', [
     )
 ]);
 
-$div_users = $div_users->gen_div();
+// $div_users = $div_users->gen_div();
 ?>

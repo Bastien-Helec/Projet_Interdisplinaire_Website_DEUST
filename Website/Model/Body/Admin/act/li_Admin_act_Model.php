@@ -33,5 +33,5 @@ $div_acts = new Div('acts_admin_ID', 'acts_CLS', [
     )
 ]);
 
-$div_acts = $div_acts->gen_div();
+// $div_acts = $div_acts->gen_div();
 ?>
