@@ -26,12 +26,35 @@ $div_acts = new Div('acts_admin_ID', 'acts_CLS', [
                     new Glob_Fields('act_libelle_'.$id, 'act_info_CLS', 'p', 'libelle: '.$act['libelle']),
                     new Glob_Fields('act_tarif_'.$id, 'act_info_CLS', 'p', 'tarif: '.$act['tarif']),
                     new Glob_Fields('act_nbPlace_'.$id, 'act_info_CLS', 'p', 'nombres de Places: '.$act['nbPlace']),
-                    new Glob_Fields('suppression_'.$id, 'btn', 'button', '<a href="?suppression_act='.$id.'">Supprimer</a>')
+                    new Glob_Fields(
+                        'suppression_'.$id, 
+                        'btn', 
+                        'p', // ou 'div' si tu préfères un conteneur
+                        '<a href="?page=admin&suppression_acts=' . $id . '" onclick="return confirm(\'Confirmer la suppression ?\')">Supprimer</a>'
+                    )
                 ]
             );
         }, $acts_data)
     )
 ]);
+
+// Si une suppression est demandée
+if (isset($_GET['suppression_acts'])) {
+    $acts_id = $_GET['suppression_acts'];
+
+    // Sécurisation minimum (tu peux aussi cast en int : (int) $acts_id)
+    if (is_numeric($acts_id)) {
+        $delete = new Delete_SQL('ACTIVITE');
+        $result = $delete->execute_Simple_SQL('idActivite = "' . $acts_id . '"', $pdo_cnx);
+        echo "<script>console.log('Suppression OK: " . htmlspecialchars(json_encode($result)) . "');</script>";
+        
+        // Optionnel : redirection après suppression
+        echo '<script>window.location.href = "?page=admin";</script>';
+        exit;
+    } else {
+        echo "<script>console.error('ID Activité invalide');</script>";
+    }
+}
 
 // $div_acts = $div_acts->gen_div();
 ?>

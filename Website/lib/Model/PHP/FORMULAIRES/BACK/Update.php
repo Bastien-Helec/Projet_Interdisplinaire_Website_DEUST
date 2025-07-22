@@ -2,24 +2,20 @@
 
 class Update extends BaseForm {
 
-    private function update($after_set, $db_table,$join = "", $cdt_simple ="", $sup_cdts = "") {
-        if (!empty($_POST)) {
-            $update_sql = new SQL_Update($db_table, $after_set, $_POST);
+private function update($db_columns, $db_table, $cdt, $cdt_plus = "", $cdts = "") {
+    if (!empty($_POST)) {
+        $update_sql = new SQL_Update($db_table, $db_columns, $_POST);
 
-            if (empty($cdt)) {
-                $result = $update_sql->execute_Cmplx_SQL($join, $sup_cdts, $this->pdo);
-            } elseif (empty($sup_cdts)) {
-                $result = $update_sql->execute_Simple_SQL($cdt_simple, $this->pdo);
-            } else {
-                if ($join === "") {
-                    $result = $update_sql->execute_Cmplx_SQL($join, $sup_cdts, $this->pdo);
-                }
-                else {
-                    $result = $update_sql->execute_Cmplx_SQL($join, $sup_cdts, $this->pdo);
-                }
-            }
+        // Cas 1 : tableau de colonnes → update simple
+        if (is_array($db_columns)) {
+            $result = $update_sql->execute_Simple_SQL($cdt, $this->pdo);
+        }
+        // Cas 2 : colonne(s) déjà formatée(s) (ex: "col = val") → update complexe
+        else {
+            $result = $update_sql->execute_Cmplx_SQL($cdt_plus, $cdts, $this->pdo);
+        }
 
-            unset($_POST);
+        unset($_POST);
 
             if ($result) {
                 $this->message = "Modification effectuée avec succès";
@@ -58,9 +54,9 @@ class Update extends BaseForm {
         }
     }
 
-    public function set_update($after_set, $db_table,$join = "", $cdt_simple ="" , $sup_cdts = "") {
+    public function set_update($db_columns, $db_table, $cdt, $cdt_plus = "", $cdts = "") {
         if ($this->isPost) {
-            return $this->update($after_set, $db_table, $join , $cdt_simple, $sup_cdts);
+            return $this->update($db_columns, $db_table, $cdt, $cdt_plus, $cdts);
         } else {
             $this->message = "Aucune donnée à mettre à jour";
             echo json_encode([

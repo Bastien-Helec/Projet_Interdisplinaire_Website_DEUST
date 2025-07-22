@@ -28,12 +28,35 @@ $div_ses = new Div('ses_admin_ID', 'ses_CLS', [
                     new Glob_Fields('ses_nbPlace_'.$id, 'ses_info_CLS', 'p', 'nombres de Places: '.$ses['nbPlace']),
                     new Glob_Fields('ses_salle_id_'.$id, 'ses_info_CLS', 'p', 'Salle ID : '.$ses['salle_id']),
                     new Glob_Fields('ses_planning_id_'.$id, 'ses_info_CLS', 'p', 'Planning ID : '.$ses['planning_id']),
-                    new Glob_Fields('suppression_'.$id, 'btn', 'button', '<a href="?suppression_ses='.$id.'">Supprimer</a>')
+                    new Glob_Fields(
+                        'suppression_'.$id, 
+                        'btn', 
+                        'p', // ou 'div' si tu préfères un conteneur
+                        '<a href="?page=admin&suppression_ses=' . $id . '" onclick="return confirm(\'Confirmer la suppression ?\')">Supprimer</a>'
+                    )
                 ]
             );
         }, $ses_data)
     )
 ]);
+
+// Si une suppression est demandée
+if (isset($_GET['suppression_ses'])) {
+    $ses_id = $_GET['suppression_ses'];
+
+    // Sécurisation minimum (tu peux aussi cast en int : (int) $ses_id)
+    if (is_numeric($ses_id)) {
+        $delete = new Delete_SQL('SESSION');
+        $result = $delete->execute_Simple_SQL('idSession = "' . $ses_id . '"', $pdo_cnx);
+        echo "<script>console.log('Suppression OK: " . htmlspecialchars(json_encode($result)) . "');</script>";
+        
+        // Optionnel : redirection après suppression
+        echo '<script>window.location.href = "?page=admin";</script>';
+        exit;
+    } else {
+        echo "<script>console.error('ID Session invalide');</script>";
+    }
+}
 
 // $div_ses = $div_ses->gen_div();
 ?>

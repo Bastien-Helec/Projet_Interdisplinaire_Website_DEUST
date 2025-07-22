@@ -105,6 +105,7 @@ if (isset($_GET['page'])){
         case 'admin' : 
             if(isset($_SESSION['isadmin']) && $_SESSION['isadmin'] === true ){
                 require "./Controller/Body/Admin/Admin_Controller.php";
+                require "./Controller/Body/Admin/Formulaires/Formulaire_Controller.php";
                 echo '<link rel="stylesheet" href="./Controller/Body/Admin/Admin_CSS_Controller.php">';
             }else {
                 require_once "./Controller/Body/Erreur/403_Controller.php";
@@ -117,4 +118,6 @@ if (isset($_GET['page'])){
             // Le pied du site
             require_once "./Controller/Foot/Foot_Controller.php";
 ?>
+
 <script src="./Controller/Head/Header/Formulaires/Formulaires_JS_Controller.php"></script>
+<script src="./Controller/Body/Admin/Formulaires_JS_Controller.php"></script>

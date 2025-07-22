@@ -38,7 +38,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['form_id'])){
             $insc->FORM_Interact('UTILISATEUR', 'nom,prenom,adresse,cp,ville,mail,login,mdp,club_id', ['Nom', 'Prenom', 'Adresse', 'Cp', 'Ville', 'Email','Login', 'Mdp'], ['Mdp' => 'password_hash'], "SELECT", ", idClub FROM CLUB WHERE nom='{$_POST['Inscription_club_name_choix_valeur']}'");
             break;
 
+        // Ajouter Utilisateur
+        case 'Ajouter_usr':
+            $ajout_usr = new Glob_Handling('banner', '', $pdo_cnx);
+            $ajout_usr->FORM_Interact('UTILISATEUR', 'nom,prenom,adresse,cp,ville,mail,login,mdp,club_id', ['Nom', 'Prenom', 'Adresse', 'Cp', 'Ville', 'Email','Login', 'Mdp'], ['Mdp' => 'password_hash'], "SELECT", ", idClub FROM CLUB WHERE nom='{$_POST['Ajouter_usr_club_name_choix_valeur']}'");
+            break;
+
+        // Ajouter Activité
+        case 'Ajouter_act':
+            $ajout_act = new Glob_Handling('banner', '', $pdo_cnx);
+            $ajout_act->FORM_Interact(
+                'ACTIVITE',
+                'libelle,tarif,nbPlace',
+                ['libelle', 'tarif', 'nbPlace']
+            );
+            break;
+
+        // Ajouter Session
+        case 'Ajouter_ses':
+            $ajout_ses = new Glob_Handling('banner', '', $pdo_cnx);
+            $ajout_ses->FORM_Interact(
+                'SESSION',
+                'theme,tarif,nbPlace,salle_id,planning_id',
+                ['theme', 'tarif', 'nbPlace','salle_id','planning_id'],
+                [],);
+            break;
+
+// Modifier Utilisateur
+case 'Modifier_usr':
+    $modif_usr = new Update('banner', '', $pdo_cnx);
+    $modif_usr->set_update( ['nom','prenom','adresse', 'cp','ville','mail','login','mdp'],'UTILISATEUR',  'idUtilisateur = '.$_POST['idUtilisateur'].'');
+break;
+
+
+
+        // Modifier Activité
+case 'Modifier_act':
+    $modif_act = new Update('banner', '', $pdo_cnx);
+    $modif_act->set_update(
+        ['libelle', 'tarif', 'nbPlace'],      // noms des colonnes seulement
+        'ACTIVITE',
+        'idActivite = ' . (int)$_POST['idActivite'] // condition WHERE sécurisée
+    );
+    break;
+
+
+
+        // Modifier Session
+case 'Modifier_ses':
+    $modif_ses = new Update('banner', '', $pdo_cnx);
+    $modif_ses->set_update(['theme,tarif,nbPlace,salle_id,planning_id'], 'SESSION', 'idSession =' .$_POST['idSession'].'');
+
+    break;
+
+
     }
 }
-
 ?>
