@@ -30,7 +30,7 @@ Class Glob_Handling extends BaseForm {
         if (isset($values) && $values !==null) {
             $values = rtrim($values,',');
             
-            $insert_sql = new SQL_Insert($db_columns,$db_table);
+            $insert_sql = new Insert_SQL($db_columns,$db_table);
             if($cdt_plus === null) {
             $cdts_db= null;
             $insert_sql->execute_Simple_SQL($values, $this->pdo);

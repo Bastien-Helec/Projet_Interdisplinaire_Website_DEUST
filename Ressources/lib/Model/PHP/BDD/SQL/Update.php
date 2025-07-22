@@ -49,7 +49,7 @@ class Update_SQL {
         $sql = $this->update_SmplSQL($cdt, $pdo);
         // var_dump($sql);
         $stmt = $pdo->prepare($sql);
-        // return $stmt->execute();
+        return $stmt->execute();
     }
 
     // Exécution complexe

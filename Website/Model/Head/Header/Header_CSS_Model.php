@@ -16,7 +16,7 @@ $btn_usr_signup = (new Args_CSS('#btn_usr_signup'))
 ->set('font-family', "'Nunito',sans-serif")
 ->set('font-size','1.5rem');
 
-$btn_usr_login = (new Args_CSS('#btn_usr_login'))
+$btn_usr_login = (new Args_CSS('#btn_usr_login , #btn_usr_logout'))
 ->set('border-radius', '6px')
 ->set('background-color', 'transparent')
 ->set('color', '#FFFFFF')
@@ -29,7 +29,7 @@ $btn_Primary_hover = (new Args_CSS('#btn_usr_signup:hover'))
 ->set('color', '#F3722C')
 ->set('transition', 'background 0.3s');
 
-$btn_Secondary_hover = (new Args_CSS('#btn_usr_login:hover'))
+$btn_Secondary_hover = (new Args_CSS('#btn_usr_login:hover , #btn_usr_logout:hover'))
 ->set('background-color', '#FFFFFF')
 ->set('color', '#a5cfe5')
 ->set('transition', 'background 0.3s');
@@ -48,6 +48,9 @@ $div_usr_auth=(new Args_CSS('#usr_auth'))
 ->set('position', 'relative')
 ->set('top', '-50px');
 
+// $banner = (new Args_CSS('#banner'))
+// ->set('display', 'none');
+
 $Header_CSS = [
     $default_btn,
     $btn_usr_signup,
@@ -56,7 +59,8 @@ $Header_CSS = [
     $btn_Secondary_hover,
     $header_title,
     $div_header,
-    $div_usr_auth
+    $div_usr_auth,
+    $banner
 ];
 
 foreach($Header_CSS as $css){

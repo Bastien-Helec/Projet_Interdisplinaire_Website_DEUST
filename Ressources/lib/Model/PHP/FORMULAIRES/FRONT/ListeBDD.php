@@ -26,7 +26,7 @@ class ListeBDD implements FormElement {
         // On appelle le pdo 
         $this->pdo = $pdo;
 
-        // On instancie la libelle
+        // On instancie le libelle
         $this->libelle = new Libelle($this->nom_table, $this->nom_colonne, $this->pdo);
     }
 
@@ -55,6 +55,7 @@ class ListeBDD implements FormElement {
         return [
             'nom_liste' => $this->nom_liste,
             'nom_btn' => $this->nom_btn,
+            'colonne' => $this->nom_colonne, 
             'libelle' => $libelle
         ];
 

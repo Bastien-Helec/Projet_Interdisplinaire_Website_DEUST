@@ -10,7 +10,6 @@
  */ 
 if (!empty($formData)) {
     // var_dump($formData['id']);
-
     // Initialisation du header du formulaire
     echo '<div class="Formulaire" id="'.$formData['id']. '_div">';
     
@@ -24,16 +23,17 @@ if (!empty($formData)) {
 
     echo '<h2 style="text-align:center;"> '.$Titre.'</h2>';
     echo "<form id='{$formData['id']}_form'>";
-
+    echo '<input type="hidden" name="form_id" value="'.$formData['id'].'">';
+    
     /* Nos données sont stocker dans un tableau $formData. 
     - On va donc récupérer les données pour nos besoin spécifiques
-
+    
     - On cherche tout ce qui est contenu dans elements (corresponds au fields et ou liste) et on simplifie nos recherches en nommant notre tableau $elements
     
     Pour chaque element on va faire une boucle
     */ 
     foreach ($formData['elements'] as $element) {
-
+        
         // Si $elements contient un champs 'nom' c'est alors un type fields
         if (isset($element['nom'])) {
 
@@ -77,6 +77,7 @@ if (!empty($formData)) {
 
         // Si $elements contient un champs 'nom_liste' c'est alors un type liste
         elseif (isset($element['nom_liste'])) {
+            // var_dump($element);
 
             echo '<div class="select" id= '.$formData['id'].'_' . $element['nom_liste'] . '_select>';
             // On créer donc le champ associé
@@ -87,8 +88,8 @@ if (!empty($formData)) {
 
             // On va chercher les libelles de la BDD correspondante au valeur des colonnes
             foreach ($element['libelle'] as $opts) {
-                $libelle = str_replace('_', ' ', $opts['libelle']);
-                echo "<li id = '{$opts['libelle']}' data-value='{$opts['libelle']}'>" . htmlspecialchars($libelle) . "</li>";
+                $libelle = str_replace('_', ' ', $opts[$element['colonne']]);
+                echo "<li id = '{$opts[$element['colonne']]}' data-value='{$opts[$element['colonne']]}'>" . htmlspecialchars($libelle) . "</li>";
             }
             // On ferme la liste
             echo '</ul>';
