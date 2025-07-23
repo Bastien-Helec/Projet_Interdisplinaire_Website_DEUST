@@ -9,11 +9,15 @@ class JS_Remove_Banner {
 
     public function Remove_Banner_js(): string {
         return "
-            document.addEventListener('click', (event) => {
-            {$this->id_banner}.classList.remove('actif');
-    });
-            "
-        ;
+        document.addEventListener('DOMContentLoaded', () => {
+            const banner = document.getElementById('{$this->id_banner}');
+            if (banner) {
+                document.addEventListener('click', (event) => {
+                    banner.classList.remove('actif');
+                });
+            }
+        });";
     }
 }
+
 ?>

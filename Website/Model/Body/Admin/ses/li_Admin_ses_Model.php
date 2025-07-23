@@ -9,9 +9,11 @@ $ses_data = $ses->execute_Cmplx_fetchAll_SQL('', $pdo_cnx);
 
 // Construction du conteneur principal
 $div_ses = new Div('ses_admin_ID', 'ses_CLS', [
-    new Bouton('ajout_ses_admin_ID', 'Ajouter', 'btn'),
-    new Bouton('Modifier_ses_admin', 'Modifier', 'btn'),
-    new Glob_Fields('ses_header_ID', 'ses_header_CLS', 'h1', 'Gestion des Sessions'),
+    new Div('', '', [
+        new Glob_Fields('ses_header_ID', 'ses_header_CLS', 'h1', 'Gestion des Sessions'),
+        new Bouton('ajout_ses_admin_ID', 'Ajouter', 'btn'),
+        new Bouton('Modifier_ses_admin', 'Modifier', 'btn'),
+    ]),
     
     new Div(
         'ses_body_ID',
@@ -24,14 +26,14 @@ $div_ses = new Div('ses_admin_ID', 'ses_CLS', [
                 [
                     new Glob_Fields('ses_id_'.$id, 'ses_info_CLS', 'h4', 'Session ID: '.$id),
                     new Glob_Fields('ses_libelle_'.$id, 'ses_info_CLS', 'p', 'theme: '.$ses['theme']),
-                    new Glob_Fields('ses_tarif_'.$id, 'ses_info_CLS', 'p', 'tarif: '.$ses['tarif']),
+                    new Glob_Fields('ses_tarif_'.$id, 'ses_info_CLS', 'p', 'tarif: '.$ses['tarif'] . '€'),
                     new Glob_Fields('ses_nbPlace_'.$id, 'ses_info_CLS', 'p', 'nombres de Places: '.$ses['nbPlace']),
                     new Glob_Fields('ses_salle_id_'.$id, 'ses_info_CLS', 'p', 'Salle ID : '.$ses['salle_id']),
                     new Glob_Fields('ses_planning_id_'.$id, 'ses_info_CLS', 'p', 'Planning ID : '.$ses['planning_id']),
                     new Glob_Fields(
                         'suppression_'.$id, 
                         'btn', 
-                        'p', // ou 'div' si tu préfères un conteneur
+                        'button', // ou 'div' si tu préfères un conteneur
                         '<a href="?page=admin&suppression_ses=' . $id . '" onclick="return confirm(\'Confirmer la suppression ?\')">Supprimer</a>'
                     )
                 ]

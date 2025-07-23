@@ -96,6 +96,7 @@ class Auth extends BaseForm {
 
 public function FORM_Connect($db_columns, $first_name_db, $last_name_db, $mail_db, $mail_name, $passwd_name, $psswd_db, $db_table) {
     $status=null;
+    try{
     if ($this->isPost) {
         if (isset($_POST[$mail_name]) && isset($_POST[$passwd_name]) && count($_POST) === 2) {
             $this->auth($db_columns, $first_name_db, $last_name_db, $mail_db, $mail_name, $passwd_name, $psswd_db, $db_table);
@@ -115,6 +116,18 @@ public function FORM_Connect($db_columns, $first_name_db, $last_name_db, $mail_d
             exit;
         }
     }
+            } catch (Exception $e) {
+            echo json_encode([
+                'Status' => 'Error',
+                'message' => 'Erreur de traitement',
+                'info' => $e->getMessage(),
+                'banner' => [
+                    'id' => $this->id_banner,
+                    'message' => "Erreur de traitement, voir console : {$e->getMessage()}",
+                ]
+            ]);
+            exit;
+        }
     return $status;
 }
 }

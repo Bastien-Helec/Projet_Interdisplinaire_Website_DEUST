@@ -31,9 +31,7 @@ class Select_SQL {
 
     public function activitesAvecPlanning() {
         $sql = "SELECT a.idActivite, a.libelle, a.tarif, a.nbPlace, p.date, p.estMatin
-                FROM ACTIVITE a
-                JOIN PLANIFIER pl ON a.idActivite = pl.idActivite
-                JOIN PLANNING p ON pl.idPlanning = p.idPlanning";
+                FROM ACTIVITE a JOIN PLANIFIER pl ON a.idActivite = pl.activite_id JOIN PLANNING p ON pl.planning_id = p.idPlanning";
         return $this->pdo->query($sql)->fetchAll();
     }
 

@@ -63,6 +63,8 @@ require_once "./Controller/BDD_Controller.php";
 
 // Header contient la navbar et l'entête
 require_once "./Controller/Head/Head_Controller.php";
+require "./Controller/Body/Activities/Formulaire/Formulaire_Controller.php";
+require "./Controller/Body/Conferences/Formulaire/Formulaire_Controller.php";
 // var_dump($_SESSION);
 // Le corps du site
 if (empty($_GET)){
@@ -75,7 +77,6 @@ if (isset($_GET['page'])){
     switch ($_GET['page']){
         
         case 'activities':
-            echo "<h1> Activités </h1>";
             echo'
             <link rel="stylesheet" href="./Controller/Body/Activities/planning_activities/planning_Activities_CSS_Controller.php">
             <link rel="stylesheet" href="./Controller/Body/Activities/li_activities/li_Activities_CSS_Controller.php">';
@@ -85,8 +86,7 @@ if (isset($_GET['page'])){
             break;
             
             
-        case 'conferences':
-            echo "<h1> Conférences </h1>";
+        case 'conferences':;
             echo'            
             <link rel="stylesheet" href="./Controller/Body/Conferences/planning_conferences/planning_Conferences_CSS_Controller.php">
             <link rel="stylesheet" href="./Controller/Body/Conferences/li_conferences/li_Conferences_CSS_Controller.php">';
@@ -94,13 +94,18 @@ if (isset($_GET['page'])){
             require_once "./Controller/Body/Conferences/Conferences_Controller.php";                
             break;
                 
-        case 'planning':
-            echo "<h1> Planning </h1>";
-            echo'            
-            <link rel="stylesheet" href="./Controller/Body/Planning/planning_CSS_Controller.php">';
+        // case 'planning':
+        //     // echo planning if $_SESSION['Identifiant'] exist else "general'
+        //     if (isset($_SESSION['Identifiant']) && !empty($_SESSION['Identifiant'])) {
+        //         echo "<h1> Planning de " . $_SESSION['Identifiant'] . " </h1>";
+        //     } else {
+        //         echo "<h1> Planning général </h1>";
+        //     }
+        //     echo'            
+        //     <link rel="stylesheet" href="./Controller/Body/Planning/planning_CSS_Controller.php">';
             
-            require_once "./Controller/Body/Planning/planning_Controller.php";
-            break;
+        //     require_once "./Controller/Body/Planning/planning_Controller.php";
+        //     break;
         
         case 'admin' : 
             if(isset($_SESSION['isadmin']) && $_SESSION['isadmin'] === true ){
@@ -121,3 +126,4 @@ if (isset($_GET['page'])){
 
 <script src="./Controller/Head/Header/Formulaires/Formulaires_JS_Controller.php"></script>
 <script src="./Controller/Body/Admin/Formulaires_JS_Controller.php"></script>
+<script src="./Controller/Body/Formulaires_JS_Controller.php"></script>

@@ -10,10 +10,12 @@ $users_data = $users->execute_Cmplx_fetchAll_SQL('', $pdo_cnx);
 
 // Construction du conteneur principal
 $div_users = new Div('users_admin_ID', 'users_CLS', [
-    new Bouton('ajout_user_admin_ID', 'Ajouter', 'btn'),
-    new Bouton('Modifier_user_admin', 'Modifier', 'btn'),
-    new Glob_Fields('users_header_ID', 'users_header_CLS', 'h1', 'Gestion des utilisateurs'),
-    
+    new Div('', '', [
+        new Glob_Fields('users_header_ID', 'users_header_CLS', 'h1', 'Gestion des utilisateurs'),
+        new Bouton('ajout_user_admin_ID', 'Ajouter', 'btn'),
+        new Bouton('Modifier_user_admin', 'Modifier', 'btn'),
+    ]),
+
     new Div(
         'users_body_ID',
         'users_body_CLS',
@@ -31,7 +33,7 @@ $div_users = new Div('users_admin_ID', 'users_CLS', [
                     new Glob_Fields(
                         'suppression_'.$id, 
                         'btn', 
-                        'p', // ou 'div' si tu préfères un conteneur
+                        'button', // ou 'div' si tu préfères un conteneur
                         '<a href="?page=admin&suppression_user=' . $id . '" onclick="return confirm(\'Confirmer la suppression ?\')">Supprimer</a>'
                     )
                 ]

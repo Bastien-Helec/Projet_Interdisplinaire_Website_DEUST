@@ -2,7 +2,7 @@
 
 require_once "./lib/Model/PHP/PAGES/Div.php";
 require_once "./lib/Model/PHP/PAGES/Fields.php";
-require_once "./lib/Model/PHP/BDD/SQL/FONCTIONS METIERS/Select.php";
+require_once "./lib/Model/PHP/BDD/SQL/FONCTIONS_METIERS/Select.php";
 
 function create_li_activities_planning($number, $contenu) {
     $li_activities = new Glob_Fields("li_activite_planning_{$number}_title", "div_li_activite_CLS", 'h4', "Activité {$number}");
@@ -17,24 +17,25 @@ function create_li_activities_planning($number, $contenu) {
 }
 
 // Liste les activites + leur planning
-$activites = Select_SQL::activitesAvecPlanning();
+$select= new Select_SQL($pdo_cnx);
+$activites = $select->activitesAvecPlanning();
 
 $liste_divs = [];
-
 foreach ($activites as $index => $activite) {
     $contenu = "{$activite["libelle"]} | Tarif : {$activite["tarif"]} € | Places : {$activite["nbPlace"]} | Date : {$activite["date"]} | " .
-               ($activite["estMatin"] ? "Matin" : "Après-midi");
+    ($activite["estMatin"] ? "Matin" : "Après-midi");
 
     $liste_divs[] = create_li_activities_planning($index + 1, $contenu);
 }
+
 
 $div_li_activities_planning = new Div(
     'div_li_activities_planning_ID',
     'div_li_activities_planning_CLS',
     array_merge([
-        new Glob_Fields("li_activities_planning_title_ID", "li_activities_planning_title_CLS", "h1", "Planning des Activités")
+        new Glob_Fields("li_activities_planning_title_ID", "li_activities_planning_title_CLS", "h1", "Planning des Activités"),
     ], $liste_divs)
 );
 
-$div_li_activities_planning = $div_li_activities_planning->gen_div();
+$div_planning_activities = $div_li_activities_planning->gen_div();
 ?>

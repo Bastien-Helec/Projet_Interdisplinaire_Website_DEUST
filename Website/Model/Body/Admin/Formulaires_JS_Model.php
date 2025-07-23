@@ -26,6 +26,12 @@ echo $Ajouter_act_remove_JS->gen_remove_js();
 $Ajouter_ses_Call_JS = new JS_CALL_FORM('Ajouter_ses_div', 'ajout_ses_admin_ID','banner');
 echo $Ajouter_ses_Call_JS->gen_print_FORM_js();
 
+$Liste_BDD_Planning = new JS_Sort_ListeBDD('Ajouter_ses_Planning');
+echo $Liste_BDD_Planning->gen_list_js();
+
+$Liste_BDD_Salle = new JS_Sort_ListeBDD('Ajouter_ses_Salle');
+echo $Liste_BDD_Salle->gen_list_js();
+
 $Ajouter_ses_remove_JS = new JS_Remove_Event('Ajouter_ses_div', 'ajout_ses_admin_ID');
 echo $Ajouter_ses_remove_JS->gen_remove_js();
 
@@ -50,8 +56,6 @@ $Modifier_ses_Call_JS = new JS_CALL_FORM('Modifier_ses_div','Modifier_ses_admin'
 echo $Modifier_ses_Call_JS ->gen_print_FORM_js();
 
 $Modifier_ses_remove_js = new JS_Remove_Event('Modifier_ses_div', 'Modifier_ses_admin');
-echo $Modifier_ses_remove_js->gen_remove_js();
-
 
 
 $banner_remove = new JS_Remove_Banner('banner');

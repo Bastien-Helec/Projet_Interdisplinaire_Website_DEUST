@@ -2,13 +2,13 @@
 
 require_once "./lib/Model/PHP/PAGES/Div.php";
 require_once "./lib/Model/PHP/PAGES/Fields.php";
-require_once "./lib/Model/PHP/BDD/SQL/FONCTIONS METIERS/Select.php"; 
+require_once "./lib/Model/PHP/BDD/SQL/FONCTIONS_METIERS/Select.php";
 
 function create_li_activities($number, $contenu) {
-    $li_activities = new Glob_Fields("li_activite_{$number}_title", "div_li_activite_CLS", 'h4', "Activité {$number}");
-    $li_activities_body = new Glob_Fields("li_activite_{$number}_body", "div_li_activite_CLS", 'p', "{$contenu}");
+    $li_activities = new Glob_Fields("li_activite_{$number}_title", "div_li_activities_CLS", 'h4', "Activité {$number}");
+    $li_activities_body = new Glob_Fields("li_activite_{$number}_body", "div_li_activities_CLS", 'p', "{$contenu}");
 
-    $div_li_activities_number = new Div("li_activite_{$number}_ID", "div_li_activite_CLS", [
+    $div_li_activities_number = new Div("li_activite_{$number}_ID", "div_li_activities_CLS", [
         $li_activities,
         $li_activities_body,
     ]);
@@ -17,7 +17,8 @@ function create_li_activities($number, $contenu) {
 }
 
 // Liste de toutes activités
-$activites = Select_SQL::toutesLesActivites();
+$select_sql = new Select_SQL($pdo_cnx);
+$activites = $select_sql->toutesLesActivites();
 
 $liste_divs = [];
 

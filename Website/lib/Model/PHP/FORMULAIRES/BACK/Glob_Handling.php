@@ -3,6 +3,7 @@
 Class Glob_Handling extends BaseForm {
 
    private function Insert_data(string $db_table, string $db_columns, $F_names, $F_action, $cdt_plus, $cdts_db) {
+    
     $raw_values = [];
 
     // Étape 1 : gestion éventuelle des transformations (ex: hash mot de passe)
@@ -27,11 +28,12 @@ Class Glob_Handling extends BaseForm {
     }
 
     // Étape 3 : insertion
-    if (!empty($raw_values)) {
-        $insert_sql = new Insert_SQL($db_columns, $db_table);
+if (!empty($raw_values) || $cdt_plus !== null) {
+    $insert_sql = new Insert_SQL($db_columns, $db_table);
 
-        if ($cdt_plus === null) {
-            $insert_sql->execute_Simple_SQL($raw_values, $this->pdo);
+    if ($cdt_plus === null) {
+        // Insertion simple classique
+        $insert_sql->execute_Simple_SQL($raw_values, $this->pdo);
 
             echo json_encode([
                 'Status' => 'Success',
@@ -47,29 +49,64 @@ Class Glob_Handling extends BaseForm {
             $sql_values = implode(', ', $quoted_values);
 
             $insert_sql->execute_Cmplx_SQL($sql_values, $cdt_plus, $cdts_db, $this->pdo);
+            // var_dump($insert_sql);
 
             echo json_encode([
                 'Status' => 'Success',
-                'message' => $raw_values[0] . ", Ajouté avec succès dans $db_table",
+                'message' => "Ajouté avec succès dans $db_table",
                 'banner' => [
                     'id' => $this->id_banner,
-                    'message' => str_replace('_', ' ', $raw_values[0]) . ", Ajouté avec succès dans $db_table"
+                    'message' => "Ajouté avec succès dans $db_table"
                 ],
             ]);
         }
+        // $insert_sql->execute_Cmplx_SQL($sql_values, $cdt_plus, $cdts_db, $this->pdo);
+
     }
 }
 
 
     public function FORM_Interact($db_table, $db_columns, array $f_name, $F_action=[],$cdt_plus=null,$cdts_db=null) {
+        try{
         if($this->isPost){
             $this->Insert_data($db_table, $db_columns, $f_name, $F_action,$cdt_plus,$cdts_db);
+            // $result = $this->Insert_data($db_table, $db_columns, $f_name, $F_action, $cdt_plus, $cdts_db);
+            // var_dump($result);
+            
         }
         else {
             echo json_encode([
                 'Status' => 'Error',
-                'message' => 'Erreur de traitement'
+                'message' => 'Erreur de traitement',
             ]);
+            exit;
+        }
+        } catch (PDOException $e) {
+        $errorMsg = $e->getMessage();
+
+        if (strpos($errorMsg, 'duplicate') !== false || strpos($errorMsg, 'Duplicate') !== false) {
+            // Cas d'erreur doublon
+            echo json_encode([
+                'Status' => 'Error',
+                'message' => "Déjà inséré : l'enregistrement existe déjà.",
+                'banner' => [
+                    'id' => $this->id_banner,
+                    'message' => "Erreur : cet enregistrement est déjà présent."
+                ],
+                'info' => $errorMsg,
+            ]);
+        } else {
+            // Autres erreurs
+            echo json_encode([
+                'Status' => 'Error',
+                'message' => "Erreur lors de l'insertion.",
+                'banner' => [
+                    'id' => $this->id_banner,
+                    'message' => "Erreur lors de l'insertion, voir console."
+                ],
+                'info' => $errorMsg,
+            ]);
+        }
             exit;
         }
     }
