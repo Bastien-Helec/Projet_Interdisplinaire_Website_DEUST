@@ -3,7 +3,7 @@ DROP DATABASE IF EXISTS congres;
 CREATE DATABASE congres DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE congres;
 
---Table club
+-- Table club
 CREATE TABLE CLUB (
     idClub INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100) NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE CLUB (
     ville VARCHAR(100)
 );
 
---Table utilisateur
+-- Table UTILISATEUR
 CREATE TABLE UTILISATEUR (
     idUtilisateur INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(50),
@@ -20,14 +20,16 @@ CREATE TABLE UTILISATEUR (
     adresse VARCHAR(150),
     cp CHAR(5),
     ville VARCHAR(100),
-    mail VARCHAR(100),
-    login VARCHAR(50),
+    mail VARCHAR(100) UNIQUE,
+    login VARCHAR(50) UNIQUE,
     mdp VARCHAR(255),
+    estAdmin BOOLEAN DEFAULT 0,
     club_id INT,
     FOREIGN KEY (club_id) REFERENCES CLUB(idClub)
 );
 
---Table inscription
+
+-- Table inscription
 CREATE TABLE INSCRIPTION (
     idInscription INT AUTO_INCREMENT PRIMARY KEY,
     estValidee BOOLEAN DEFAULT FALSE,
@@ -35,20 +37,20 @@ CREATE TABLE INSCRIPTION (
     FOREIGN KEY (utilisateur_id) REFERENCES UTILISATEUR(idUtilisateur)
 );
 
---Table salle
+-- Table salle
 CREATE TABLE SALLE (
     idSalle INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100)
 );
 
---Table planning
+-- Table planning
 CREATE TABLE PLANNING (
     idPlanning INT AUTO_INCREMENT PRIMARY KEY,
     date DATE,
     estMatin BOOLEAN
 );
 
---Table session
+-- Table session
 CREATE TABLE SESSION (
     idSession INT AUTO_INCREMENT PRIMARY KEY,
     theme VARCHAR(150),
@@ -61,7 +63,7 @@ CREATE TABLE SESSION (
     UNIQUE (salle_id, planning_id)
 );
 
---Table activite
+-- Table activite
 CREATE TABLE ACTIVITE (
     idActivite INT AUTO_INCREMENT PRIMARY KEY,
     libelle VARCHAR(150),
@@ -69,7 +71,7 @@ CREATE TABLE ACTIVITE (
     nbPlace INT
 );
 
---Table planifier
+-- Table planifier
 CREATE TABLE PLANIFIER (
     activite_id INT,
     planning_id INT,
@@ -78,7 +80,7 @@ CREATE TABLE PLANIFIER (
     FOREIGN KEY (planning_id) REFERENCES PLANNING(idPlanning)
 );
 
---Table inscrire
+-- Table inscrire
 CREATE TABLE INSCRIRE (
     idInscription INT,
     idSession INT,
@@ -87,7 +89,7 @@ CREATE TABLE INSCRIRE (
     FOREIGN KEY (idSession) REFERENCES SESSION(idSession)
 );
 
---Table participer
+-- Table participer
 CREATE TABLE PARTICIPER (
     idInscription INT,
     idActivite INT,
