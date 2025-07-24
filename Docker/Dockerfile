@@ -1,6 +1,6 @@
 # Utiliser une image PHP avec Apache
 
-FROM php:8.3-apache:latest
+FROM php:8.3-apache
 
 # Mettre à jour les paquets système pour corriger les vulnérabilités
 RUN apt-get update && apt-get upgrade -y
