@@ -5,95 +5,101 @@ USE congres;
 
 -- Table club
 CREATE TABLE CLUB (
-    idClub INT AUTO_INCREMENT PRIMARY KEY,
+    idClub INT AUTO_INCREMENT,
     nom VARCHAR(100) NOT NULL,
     adresse VARCHAR(150),
     cp CHAR(5),
-    ville VARCHAR(100)
-);
+    ville VARCHAR(100),
+    CONSTRAINT pk_club PRIMARY KEY (idClub)
+) ENGINE=InnoDB;
 
--- Table UTILISATEUR
+-- Table utilisateur
 CREATE TABLE UTILISATEUR (
-    idUtilisateur INT AUTO_INCREMENT PRIMARY KEY,
+    idUtilisateur INT AUTO_INCREMENT,
     nom VARCHAR(50),
     prenom VARCHAR(50),
     adresse VARCHAR(150),
     cp CHAR(5),
     ville VARCHAR(100),
-    mail VARCHAR(100) UNIQUE,
-    login VARCHAR(50) UNIQUE,
+    mail VARCHAR(100),
+    login VARCHAR(50),
     mdp VARCHAR(255),
-    estAdmin BOOLEAN DEFAULT 0,
+    estAdmin BOOLEAN DEFAULT FALSE,
     club_id INT,
-    FOREIGN KEY (club_id) REFERENCES CLUB(idClub)
-);
-
+    CONSTRAINT pk_utilisateur PRIMARY KEY (idUtilisateur),
+    CONSTRAINT fk_club_utilisateur FOREIGN KEY (club_id) REFERENCES CLUB(idClub)
+) ENGINE=InnoDB;
 
 -- Table inscription
 CREATE TABLE INSCRIPTION (
-    idInscription INT AUTO_INCREMENT PRIMARY KEY,
+    idInscription INT AUTO_INCREMENT,
     estValidee BOOLEAN DEFAULT FALSE,
     utilisateur_id INT UNIQUE,
-    FOREIGN KEY (utilisateur_id) REFERENCES UTILISATEUR(idUtilisateur)
-);
+    CONSTRAINT pk_inscription PRIMARY KEY (idInscription),
+    CONSTRAINT fk_utilisateur_inscription FOREIGN KEY (utilisateur_id) REFERENCES UTILISATEUR(idUtilisateur)
+) ENGINE=InnoDB;
 
 -- Table salle
 CREATE TABLE SALLE (
-    idSalle INT AUTO_INCREMENT PRIMARY KEY,
-    nom VARCHAR(100)
-);
+    idSalle INT AUTO_INCREMENT,
+    nom VARCHAR(100),
+    CONSTRAINT pk_salle PRIMARY KEY (idSalle)
+) ENGINE=InnoDB;
 
 -- Table planning
 CREATE TABLE PLANNING (
-    idPlanning INT AUTO_INCREMENT PRIMARY KEY,
+    idPlanning INT AUTO_INCREMENT,
     date DATE,
-    estMatin BOOLEAN
-);
+    estMatin BOOLEAN,
+    CONSTRAINT pk_planning PRIMARY KEY (idPlanning)
+) ENGINE=InnoDB;
 
 -- Table session
 CREATE TABLE SESSION (
-    idSession INT AUTO_INCREMENT PRIMARY KEY,
+    idSession INT AUTO_INCREMENT,
     theme VARCHAR(150),
     tarif DECIMAL(6,2),
     nbPlace INT,
     salle_id INT,
     planning_id INT,
-    FOREIGN KEY (salle_id) REFERENCES SALLE(idSalle),
-    FOREIGN KEY (planning_id) REFERENCES PLANNING(idPlanning),
-    UNIQUE (salle_id, planning_id)
-);
+    CONSTRAINT pk_session PRIMARY KEY (idSession),
+    CONSTRAINT fk_salle_session FOREIGN KEY (salle_id) REFERENCES SALLE(idSalle),
+    CONSTRAINT fk_planning_session FOREIGN KEY (planning_id) REFERENCES PLANNING(idPlanning),
+    CONSTRAINT un_salle_planning_session UNIQUE (salle_id, planning_id)
+) ENGINE=InnoDB;
 
 -- Table activite
 CREATE TABLE ACTIVITE (
-    idActivite INT AUTO_INCREMENT PRIMARY KEY,
+    idActivite INT AUTO_INCREMENT,
     libelle VARCHAR(150),
     tarif DECIMAL(6,2),
-    nbPlace INT
-);
+    nbPlace INT,
+    CONSTRAINT pk_activite PRIMARY KEY (idActivite)
+) ENGINE=InnoDB;
 
 -- Table planifier
 CREATE TABLE PLANIFIER (
     activite_id INT,
     planning_id INT,
-    PRIMARY KEY (activite_id, planning_id),
-    FOREIGN KEY (activite_id) REFERENCES ACTIVITE(idActivite),
-    FOREIGN KEY (planning_id) REFERENCES PLANNING(idPlanning)
-);
+    CONSTRAINT pk_planifier PRIMARY KEY (activite_id, planning_id),
+    CONSTRAINT fk_activite_planifier FOREIGN KEY (activite_id) REFERENCES ACTIVITE(idActivite),
+    CONSTRAINT fk_planning_planifier FOREIGN KEY (planning_id) REFERENCES PLANNING(idPlanning)
+) ENGINE=InnoDB;
 
 -- Table inscrire
 CREATE TABLE INSCRIRE (
     idInscription INT,
     idSession INT,
-    PRIMARY KEY (idInscription, idSession),
-    FOREIGN KEY (idInscription) REFERENCES INSCRIPTION(idInscription),
-    FOREIGN KEY (idSession) REFERENCES SESSION(idSession)
-);
+    CONSTRAINT pk_inscrire PRIMARY KEY (idInscription, idSession),
+    CONSTRAINT fk_inscription_inscrire FOREIGN KEY (idInscription) REFERENCES INSCRIPTION(idInscription),
+    CONSTRAINT fk_session_inscrire FOREIGN KEY (idSession) REFERENCES SESSION(idSession)
+) ENGINE=InnoDB;
 
 -- Table participer
 CREATE TABLE PARTICIPER (
     idInscription INT,
     idActivite INT,
-    PRIMARY KEY (idInscription, idActivite),
-    FOREIGN KEY (idInscription) REFERENCES INSCRIPTION(idInscription),
-    FOREIGN KEY (idActivite) REFERENCES ACTIVITE(idActivite)
-);
+    CONSTRAINT pk_participer PRIMARY KEY (idInscription, idActivite),
+    CONSTRAINT fk_inscription_participer FOREIGN KEY (idInscription) REFERENCES INSCRIPTION(idInscription),
+    CONSTRAINT fk_activite_participer FOREIGN KEY (idActivite) REFERENCES ACTIVITE(idActivite)
+) ENGINE=InnoDB;

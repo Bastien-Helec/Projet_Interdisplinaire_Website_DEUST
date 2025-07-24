@@ -1,4 +1,5 @@
---Trigger pour empecher une inscription si l'utilisateur participe déjà à une activité au même moment
+USE congres;
+-- Trigger pour empecher une inscription si l'utilisateur participe déjà à une activité au même moment
 DELIMITER $
 
 CREATE TRIGGER trg_check_conflit_activite

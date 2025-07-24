@@ -85,7 +85,11 @@ $ajout_ses->FORM_Interact(
 
         // Modifier Utilisateur
         case 'Modifier_usr':
-            $modif_usr = new Update('banner', '', $pdo_cnx);
+            if (!empty($_POST['mdp'])) {
+                $_POST['mdp'] = password_hash($_POST['mdp'], PASSWORD_DEFAULT);
+            }
+
+                        $modif_usr = new Update('banner', '', $pdo_cnx);
             $modif_usr->set_update( ['nom','prenom','adresse', 'cp','ville','mail','login','mdp'],'UTILISATEUR',  'idUtilisateur = '.$_POST['idUtilisateur'].'');
         break;
 
