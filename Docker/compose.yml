@@ -1,12 +1,14 @@
 services:
   php-8.3-apache:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: php_Congres
     ports:
       - "80:80"
     volumes:
-    - ./../Website:/var/www/html/site
-    - "./../.htaccess:/var/www/html/.htaccess"
+      - ../Website:/var/www/html/site
+      - ../.htaccess:/var/www/html/.htaccess
 
   mysql:
     image: mariadb:latest
@@ -15,9 +17,9 @@ services:
       MYSQL_ROOT_PASSWORD: Congres_DEUST_34
       MYSQL_USER: mysql
       MYSQL_PASSWORD: mysql
-      MYSQL_DATABASE : Congres
+      MYSQL_DATABASE: Congres
     volumes:
-      - ./rsc/mysql/:/var/lib/mysql
+      - ./rsc/mysql:/var/lib/mysql
     ports:
       - "3306:3306"
 
