@@ -4,7 +4,7 @@ require_once "./lib/Model/PHP/PAGES/Div.php";
 require_once "./lib/Model/PHP/PAGES/Fields.php";
 
 function create_actus($number,string $contenu){
-    $actus = new Glob_Fields("actu_{$number}_title", "div_actu_CLS", 'h4', "Actus {$number}");
+    $actus = new Glob_Fields("actu_{$number}_title", "div_actu_CLS", 'h4', "Actu {$number}");
     $actus_body = new Glob_Fields("actu_{$number}_body", "div_actu_CLS", 'p',  "{$contenu}");
 
     $div_actus_number = new Div("actu_{$number}_ID", "div_actu_CLS",[
