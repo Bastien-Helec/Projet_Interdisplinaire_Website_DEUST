@@ -1,159 +1,123 @@
 <?php
 class Select_SQL {
+    private PDO $pdo;
 
-    // Afficher tous les utilisateurs
-    public static function tousLesUtilisateurs() {
-        $sql = "SELECT UTILISATEUR.idUtilisateur, UTILISATEUR.nom, UTILISATEUR.prenom,
-                UTILISATEUR.adresse, UTILISATEUR.cp, UTILISATEUR.ville, UTILISATEUR.mail,
-                UTILISATEUR.club_id
-                FROM UTILISATEUR";
-
-        $stmt = DBPDO::getInstance()->query($sql);
-        return $stmt->fetchAll();
+    public function __construct(PDO $pdo) {
+        $this->pdo = $pdo;
     }
 
-    // Afficher tous les clubs
-    public static function tousLesClubs() {
-        $sql = "SELECT CLUB.idCLub, CLUB.nom, CLUB.adresse, CLUB.cp, CLUB.ville
-                FROM CLUB";
-
-        $stmt = DBPDO::getInstance()->query($sql);
-        return $stmt->fetchAll();
-    }
-    
-    // Afficher toutes les sessions + leur planning + salle
-    public static function sessionsAvecPlanning() {
-        $sql = "SELECT SESSION.idSession, SESSION.theme, SESSION.tarif, SESSION.nbPlace, PLANNING.date,
-                PLANNING.estMatin, SALLE.nom as Salle
-                FROM SESSION
-                JOIN PLANNING ON SESSION.planning_id = PLANNING.idPlanning
-                JOIN SALLE ON SESSION.salle_id = SALLE.idSalle";
-        
-        $stmt = DBPDO::getInstance()->query($sql);
-        return $stmt->fetchAll();
+    public function tousLesUtilisateurs() {
+        $sql = "SELECT idUtilisateur, nom, prenom, adresse, cp, ville, mail, club_id FROM UTILISATEUR";
+        return $this->pdo->query($sql)->fetchAll();
     }
 
-    // Afficher toutes les sessions 
-    public static function toutesLesSessions() {
-        $sql = "SELECT SESSION.idSession, SESSION.theme, SESSION.tarif, SESSION.nbPlace
-                FROM SESSION";
-        
-        $stmt = DBPDO::getInstance()->query($sql);
-        return $stmt->fetchAll();
+    public function tousLesClubs() {
+        $sql = "SELECT idClub, nom, adresse, cp, ville FROM CLUB";
+        return $this->pdo->query($sql)->fetchAll();
     }
 
-    // Afficher toutes les activités + leur planning
-    public static function activitesAvecPlanning() {
-        $sql = "SELECT ACTIVITE.idActivite, ACTIVITE.libelle, ACTIVITE.tarif, ACTIVITE.nbPlace, PLANNING.date,
-                PLANNING.estMatin
-                FROM ACTIVITE
-                JOIN PLANIFIER on ACTIVITE.idActivite = PLANIFIER.idActivite
-                JOIN PLANNING on PLANIFIER.idPlanning = PLANNING.idPlanning";
-
-        $stmt = DBPDO::getInstance()->query($sql);
-        return $stmt->fetchAll();
+    public function sessionsAvecPlanning() {
+        $sql = "SELECT s.idSession, s.theme, s.tarif, s.nbPlace, p.date, p.estMatin, sa.nom AS Salle
+                FROM SESSION s
+                JOIN PLANNING p ON s.planning_id = p.idPlanning
+                JOIN SALLE sa ON s.salle_id = sa.idSalle";
+        return $this->pdo->query($sql)->fetchAll();
     }
 
-    // Afficher toutes les activités
-    public static function toutesLesActivites() {
-        $sql = "SELECT ACTIVITE.idActivite, ACTIVITE.libelle, ACTIVITE.tarif, ACTIVITE.nbPlace
-                FROM ACTIVITE";
-
-        $stmt = DBPDO::getInstance()->query($sql);
-        return $stmt->fetchAll();
+    public function toutesLesSessions() {
+        $sql = "SELECT idSession, theme, tarif, nbPlace FROM SESSION";
+        return $this->pdo->query($sql)->fetchAll();
     }
 
-    // Vérifie si l'utilisateur a déjà une inscription
-    public static function inscriptionExiste($idUtilisateur) {
-        $sql = "SELECT UTILISATEUR.idUtilisateur, UTILISATEUR.nom, UTILISATEUR.prenom, INSCRIPTION.estValidee, 
-                FROM UTILISATEUR
-                JOIN INSCRIPTION on UTILISATEUR.idUtilisateur = INSCRIPTION.utilisateur_id
-                WHERE UTILISATEUR.idUtilisateur = :id";
+    public function activitesAvecPlanning() {
+        $sql = "SELECT a.idActivite, a.libelle, a.tarif, a.nbPlace, p.date, p.estMatin
+                FROM ACTIVITE a
+                JOIN PLANIFIER pl ON a.idActivite = pl.idActivite
+                JOIN PLANNING p ON pl.idPlanning = p.idPlanning";
+        return $this->pdo->query($sql)->fetchAll();
+    }
 
-        $stmt = DBPDO::getInstance()->prepare($sql);
+    public function toutesLesActivites() {
+        $sql = "SELECT idActivite, libelle, tarif, nbPlace FROM ACTIVITE";
+        return $this->pdo->query($sql)->fetchAll();
+    }
+
+    public function inscriptionExiste($idUtilisateur) {
+        $sql = "SELECT u.idUtilisateur, u.nom, u.prenom, i.estValidee
+                FROM UTILISATEUR u
+                JOIN INSCRIPTION i ON u.idUtilisateur = i.utilisateur_id
+                WHERE u.idUtilisateur = :id";
+
+        $stmt = $this->pdo->prepare($sql);
         $stmt->execute(["id" => $idUtilisateur]);
         return $stmt->fetchAll();
     }
 
-    // Liste des sessions où il reste des places
-    public static function sessionsDisponibles() {
-        $sql = "SELECT SESSION.idSession, SESSION.theme, SESSION.tarif, SESSION.nbPlace, PLANNING.date, PLANNING.estMatin
-                FROM SESSION
-                JOIN PLANNING on SESSION.planning_id = PLANNING.idPlanning
-                LEFT JOIN INSCRIRE on SESSION.idSession = INSCRIRE.idSession
-                GROUP BY SESSION.idSession
-                HAVING COUNT(INSCRIRE.idInscription) < SESSION.nbPlace";
-
-        $stmt = DBPDO::getInstance()->query($sql);
-        return $stmt->fetchAll();
+    public function sessionsDisponibles() {
+        $sql = "SELECT s.idSession, s.theme, s.tarif, s.nbPlace, p.date, p.estMatin
+                FROM SESSION s
+                JOIN PLANNING p ON s.planning_id = p.idPlanning
+                LEFT JOIN INSCRIRE i ON s.idSession = i.idSession
+                GROUP BY s.idSession
+                HAVING COUNT(i.idInscription) < s.nbPlace";
+        return $this->pdo->query($sql)->fetchAll();
     }
 
-    // Liste des activités où il reste des places
-    public static function activitesDisponibles() {
-        $sql = "SELECT ACTIVITE.idActivite, ACTIVITE.libelle, ACTIVITE.tarif, ACTIVITE.nbPlace, PLANNING.date,
-                PLANNING.estMatin
-                FROM ACTIVITE
-                LEFT JOIN PARTICIPER on ACTIVITE.idActivite = PARTICIPER.idActivite
-                JOIN PLANIFIER on ACTIVITE.idActivite = PLANIFIER.activite_id
-                JOIN PLANNING on PLANIFIER.planning_id = PLANNING.idPlanning
-                GROUP BY ACTIVITE.idActivite
-                HAVING COUNT(PARTICIPER.idInscription) < ACTIVITE.nbPlace";
-
-        $stmt = DBPDO::getInstance()->query($sql);
-        return $stmt->fetchAll();
+    public function activitesDisponibles() {
+        $sql = "SELECT a.idActivite, a.libelle, a.tarif, a.nbPlace, p.date, p.estMatin
+                FROM ACTIVITE a
+                LEFT JOIN PARTICIPER pa ON a.idActivite = pa.idActivite
+                JOIN PLANIFIER pl ON a.idActivite = pl.activite_id
+                JOIN PLANNING p ON pl.planning_id = p.idPlanning
+                GROUP BY a.idActivite
+                HAVING COUNT(pa.idInscription) < a.nbPlace";
+        return $this->pdo->query($sql)->fetchAll();
     }
 
-    // Nombre d’inscrits / places restantes par session
-    public static function statsSessions() {
-        $sql = "SELECT SESSION.idSession, SESSION.theme, SESSION.tarif,
-                SESSION.nbPlace - COUNT(INSCRIRE.idInscription) as nbPlacesRestantes, 
-                PLANNING.date, PLANNING.estMatin, SALLE.nom
-                FROM SESSION
-                JOIN PLANNING on SESSION.planning_id = PLANNING.idPlanning
-                JOIN SALLE on SESSION.salle_id = SALLE.idSalle
-                LEFT JOIN INSCRIRE on SESSION.idSession = INSCRIRE.idSession
-                GROUP BY SESSION.idSession";
-
-        $stmt = DBPDO::getInstance()->query($sql);
-        return $stmt->fetchAll();
+    public function statsSessions() {
+        $sql = "SELECT s.idSession, s.theme, s.tarif,
+                       s.nbPlace - COUNT(i.idInscription) AS nbPlacesRestantes,
+                       p.date, p.estMatin, sa.nom
+                FROM SESSION s
+                JOIN PLANNING p ON s.planning_id = p.idPlanning
+                JOIN SALLE sa ON s.salle_id = sa.idSalle
+                LEFT JOIN INSCRIRE i ON s.idSession = i.idSession
+                GROUP BY s.idSession";
+        return $this->pdo->query($sql)->fetchAll();
     }
 
-    // Nombre d’inscrits / places restantes par activité
-    public static function statsActivites() {
-        $sql = "SELECT ACTIVITE.idActivite, ACTIVITE.libelle, ACTIVITE.tarif,
-                ACTIVITE.nbPlace - COUNT(PARTICIPER.idInscription) as nbInscrit, PLANNING.date, PLANNING.estMatin
-                FROM ACTIVITE
-                LEFT JOIN PARTICIPER on ACTIVITE.idActivite = PARTICIPER.idActivite
-                JOIN PLANIFIER on ACTIVITE.idActivite = PLANIFIER.activite_id
-                JOIN PLANNING on PLANIFIER.planning_id = PLANNING.idPlanning
-                GROUP BY ACTIVITE.idActivite";
-
-        $stmt = DBPDO::getInstance()->query($sql);
-        return $stmt->fetchAll();
+    public function statsActivites() {
+        $sql = "SELECT a.idActivite, a.libelle, a.tarif,
+                       a.nbPlace - COUNT(pa.idInscription) AS nbInscrit,
+                       p.date, p.estMatin
+                FROM ACTIVITE a
+                LEFT JOIN PARTICIPER pa ON a.idActivite = pa.idActivite
+                JOIN PLANIFIER pl ON a.idActivite = pl.activite_id
+                JOIN PLANNING p ON pl.planning_id = p.idPlanning
+                GROUP BY a.idActivite";
+        return $this->pdo->query($sql)->fetchAll();
     }
 
-    // Liste des utilisateurs inscrits à une session donnée
-    public static function participantsSession($idSession) {
-        $sql = "SELECT UTILISATEUR.idUtilisateur, UTILISATEUR.nom, UTILISATEUR.prenom, UTILISATEUR.mail
-                FROM INSCRIRE
-                JOIN INSCRIPTION ON INSCRIRE.idInscription = INSCRIPTION.idInscription
-                JOIN UTILISATEUR ON INSCRIPTION.utilisateur_id = UTILISATEUR.idUtilisateur
-                WHERE INSCRIRE.idSession = :id";
+    public function participantsSession($idSession) {
+        $sql = "SELECT u.idUtilisateur, u.nom, u.prenom, u.mail
+                FROM INSCRIRE i
+                JOIN INSCRIPTION ins ON i.idInscription = ins.idInscription
+                JOIN UTILISATEUR u ON ins.utilisateur_id = u.idUtilisateur
+                WHERE i.idSession = :id";
 
-        $stmt = DBPDO::getInstance()->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
         $stmt->execute(["id" => $idSession]);
         return $stmt->fetchAll();
     }
 
-    // Liste des utilisateurs inscrits à une activité donnée
-    public static function participantsActivite($idActivite) {
-        $sql = "SELECT UTILISATEUR.idUtilisateur, UTILISATEUR.nom, UTILISATEUR.prenom, UTILISATEUR.mail
-                FROM PARTICIPER
-                JOIN INSCRIPTION on PARTICIPER.idInscription = INSCRIPTION.idInscription
-                JOIN UTILISATEUR on INSCRIPTION.utilisateur_id = UTILISATEUR.idUtilisateur
-                WHERE PARTICIPER.idActivite = :id";
+    public function participantsActivite($idActivite) {
+        $sql = "SELECT u.idUtilisateur, u.nom, u.prenom, u.mail
+                FROM PARTICIPER p
+                JOIN INSCRIPTION i ON p.idInscription = i.idInscription
+                JOIN UTILISATEUR u ON i.utilisateur_id = u.idUtilisateur
+                WHERE p.idActivite = :id";
 
-        $stmt = DBPDO::getInstance()->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
         $stmt->execute(["id" => $idActivite]);
         return $stmt->fetchAll();
     }

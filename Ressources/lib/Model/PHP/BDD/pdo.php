@@ -40,6 +40,7 @@ class DBPDO {
         }
         return $this->pdo;
     }
+
 }
 
 ?>

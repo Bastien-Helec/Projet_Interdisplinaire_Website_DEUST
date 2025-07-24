@@ -10,7 +10,7 @@ class Auth extends BaseForm {
         }
         
         // On verifie si le mot de passe est correct
-        $cnx_sql = new SQL_Select($db_columns,$db_table, "$mail_db = '$email'");
+        $cnx_sql = new Select_SQL($db_columns,$db_table);
         // echo $cnx_sql->getSQL();
         $result = $cnx_sql->execute_Simple_SQL( "$mail_db='$email'" ,$this->pdo);
         // var_dump($result);
@@ -40,7 +40,8 @@ class Auth extends BaseForm {
                 if ($state_pass === true) {
                     $state_pass_mess = "Success";
                     $this->message = "Bienvenue, {$result[0][$first_name_db]} {$result[0][$last_name_db]} $this->message";
-
+                        
+                    
                 } else {
                     $state_pass_mess = "Error";
                     $this->message = "Mot de passe incorrect";
@@ -49,11 +50,16 @@ class Auth extends BaseForm {
                 $state_mail_mess= "Error";
                 $this->message = "Email incorrect";
             }
-
+            
             if ($state_mail_mess === "Success" && $state_pass_mess === "Success") {
                 $Status = "Success";
-                $_SESSION['email']= $email;
+                $_SESSION['Identifiant']= $email;
                 $_SESSION['login_status'] = $Status;
+                
+                if (!empty($result[0]['estAdmin']) && $result[0]['estAdmin'] == 1) {
+                    $_SESSION['isadmin'] = true;
+                }
+
             }else{
                 $Status = "Error";
             } 
@@ -89,9 +95,12 @@ class Auth extends BaseForm {
     }
 
 public function FORM_Connect($db_columns, $first_name_db, $last_name_db, $mail_db, $mail_name, $passwd_name, $psswd_db, $db_table) {
+    $status=null;
+    try{
     if ($this->isPost) {
         if (isset($_POST[$mail_name]) && isset($_POST[$passwd_name]) && count($_POST) === 2) {
             $this->auth($db_columns, $first_name_db, $last_name_db, $mail_db, $mail_name, $passwd_name, $psswd_db, $db_table);
+            $status_end = "Success";
         } else {
             echo json_encode([
                 'Status' => 'Error',
@@ -103,9 +112,23 @@ public function FORM_Connect($db_columns, $first_name_db, $last_name_db, $mail_d
                 'Error_isPost' => $this->isPost,
                 'Error_After_isPost' => $this->auth($db_columns, $first_name_db, $last_name_db, $mail_db, $mail_name, $passwd_name, $psswd_db, $db_table),
             ]);
+            $status_end = "Error";
             exit;
         }
     }
+            } catch (Exception $e) {
+            echo json_encode([
+                'Status' => 'Error',
+                'message' => 'Erreur de traitement',
+                'info' => $e->getMessage(),
+                'banner' => [
+                    'id' => $this->id_banner,
+                    'message' => "Erreur de traitement, voir console : {$e->getMessage()}",
+                ]
+            ]);
+            exit;
+        }
+    return $status;
 }
 }
 ?>

@@ -4,6 +4,8 @@ require_once "./../../../../lib/Model/CSS/PAGES/Args_CSS.php";
 
 $div = (new Args_CSS('#div_planning_activities_ID'))
 ->set('background-color', '#FAFAFA')
+->set('overflow-x', 'visible')
+->set('overflow-y', 'hidden')
 ->set('display', 'flex')
 ->set('padding','5px')
 ->set('gap', '40px')
@@ -12,7 +14,7 @@ $div = (new Args_CSS('#div_planning_activities_ID'))
 
 $planning_activities_CLS = (new Args_CSS('.div_planning_activitie_CLS'))
 ->set('width', '100%')
-->set('height', '100%')
+->set('height', 'auto')
 ->set('text-align', 'center')
 ->set('background-color', '#D9D9D9')
 ;

@@ -27,14 +27,14 @@ Class Insert_SQL {
         $sql = $this->add_SmplSQL($val);
         // var_dump($sql);
         $stmt= $pdo->prepare($sql);
-        $stmt->execute(is_array($val) ? $val : [$val]);
+        return $stmt->execute(is_array($val) ? $val : [$val]);
     }
 
     public function execute_Cmplx_SQL($val,$cdt_plus,$cdts,PDO $pdo) {
         $sql = $this->add_CmplxSQL($val,$cdt_plus,$cdts);
         // var_dump($sql);
         $stmt= $pdo->prepare($sql);
-        $stmt->execute();
+        return $stmt->execute();
     }
 }
 

@@ -7,6 +7,22 @@ $li_default = (new Args_CSS('li'))
 ->set('margin', '0px')
 ->set('padding', '0px')
 ;
+
+$ul_activities_navbar = (new Args_CSS('#ul_activities_ID , #ul_conf_ID'))
+->set('display', 'flex')
+->set('flex-direction', 'column')
+->set('align-items', 'center')
+->set('flex-wrap', 'wrap');
+
+$btn_ul_acti_conf = (new Args_CSS('#ul_activities_ID button, #ul_conf_ID button'))
+->set('background-color', '#a5cfe5')
+->set('color', '#FFFFFF');
+
+$btn_ul_acti_conf_hover = (new Args_CSS('#ul_activities_ID button:hover, #ul_conf_ID button:hover'))
+->set('background-color', '#FFFFFF')
+->set('color', '#a5cfe5');
+
+
 $a_default = (new Args_CSS('a'))
 ->set('text-decoration', 'none')
 ->set('color', 'inherit')
@@ -34,7 +50,10 @@ $navbar_CSS = [
     $a_default,
     $a_hover,
     $navbar,
-    $div_navbar
+    $div_navbar,
+    $ul_activities_navbar,
+    $btn_ul_acti_conf,
+    $btn_ul_acti_conf_hover,
 ];
 
 foreach($navbar_CSS as $css){

@@ -21,6 +21,8 @@ public function execute_Simple_SQL(string $cdt, PDO $pdo) {
     // var_dump($sql);
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
+    return false;
+
 }
 
 public function execute_Cmplx_SQL(string $cdt_plus, string $cdts, PDO $pdo) {
@@ -28,6 +30,7 @@ public function execute_Cmplx_SQL(string $cdt_plus, string $cdts, PDO $pdo) {
     // var_dump($sql);
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
+    return false;
 }
 
 }

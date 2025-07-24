@@ -1,4 +1,5 @@
---Trigger pour empêcher une participation si un utilisateur est déjà inscrit à une session au même moment
+USE congres;
+-- Trigger pour empêcher une participation si un utilisateur est déjà inscrit à une session au même moment
 DELIMITER $
 
 CREATE TRIGGER trg_check_conflit_session
@@ -24,7 +25,7 @@ BEGIN
         FROM INSCRIPTION 
         JOIN INSCRIRE ON INSCRIPTION.idInscription = INSCRIRE.idInscription
         JOIN SESSION ON SESSION.idSession = INSCRIRE.idSession
-        JOIN PLANNING ON SESSION.idPlanning = PLANNING.planning_id
+        JOIN PLANNING ON SESSION.planning_id = PLANNING.idPlanning
         WHERE INSCRIPTION.utilisateur_id = v_utilisateur_id
           AND PLANNING.date = v_date
           AND PLANNING.estMatin = v_estMatin
